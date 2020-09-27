@@ -1,0 +1,203 @@
+ext.deps = [:]
+def versions = [:]
+versions.android_gradle_plugin = '3.4.0'
+versions.appcompat = "1.2.0"
+versions.arch_core = "2.0.1"
+versions.atsl_core = "1.2.0"
+versions.atsl_junit = "1.1.1"
+versions.atsl_rules = "1.2.0"
+versions.atsl_runner = "1.2.0"
+versions.benchmark = "1.0.0-alpha04"
+versions.constraint_layout = "2.0.1"
+versions.core_ktx = "1.0.0"
+versions.dagger = "2.29.1"
+versions.dexmaker = "2.2.0"
+versions.espresso = "3.2.0"
+versions.fragment = "1.2.0-alpha02"
+versions.glide = "4.8.0"
+versions.hamcrest = "1.3"
+versions.junit = "4.12"
+versions.lifecycle = "2.2.0"
+versions.mockito = "2.25.0"
+versions.mockito_all = "1.10.19"
+versions.mockito_android = "2.25.0"
+versions.mockwebserver = "3.8.1"
+versions.navigation = "2.2.0-alpha01"
+versions.okhttp_version = "4.9.0"
+versions.paging = "2.1.0-rc01"
+versions.retrofit = "2.9.0"
+versions.robolectric = "4.2"
+versions.room = "2.1.0"
+versions.rx_android = "2.0.1"
+versions.rxjava2 = "2.1.3"
+versions.support = "1.2.0"
+versions.timber = "4.5.1"
+versions.work = "2.2.0"
+versions.gson = "2.8.6"
+versions.viewpager = "1.0.0-rc01"
+ext.versions = versions
+
+def deps = [:]
+deps.benchmark = "androidx.benchmark:benchmark-junit4:$versions.benchmark"
+deps.benchmark_gradle = "androidx.benchmark:benchmark-gradle-plugin:$versions.benchmark"
+
+def support = [:]
+support.annotations = "androidx.annotation:annotation:$versions.support"
+support.app_compat = "androidx.appcompat:appcompat:$versions.appcompat"
+support.recyclerview = "androidx.recyclerview:recyclerview:1.1.0"
+support.cardview = "androidx.cardview:cardview:$versions.support"
+support.design = "com.google.android.material:material:$versions.support"
+support.viewpager = "androidx.viewpager2:viewpager2:$versions.viewpager"
+support.core_utils = "androidx.legacy:legacy-support-core-utils:$versions.support"
+support.core_ktx = "androidx.core:core-ktx:$versions.core_ktx"
+support.fragment_runtime = "androidx.fragment:fragment:${versions.fragment}"
+support.fragment_runtime_ktx = "androidx.fragment:fragment-ktx:${versions.fragment}"
+support.fragment_testing = "androidx.fragment:fragment-testing:${versions.fragment}"
+support.legacy_v4 = "androidx.legacy:legacy-support-v4:1.0.0"
+deps.support = support
+
+def room = [:]
+room.runtime = "androidx.room:room-runtime:$versions.room"
+room.compiler = "androidx.room:room-compiler:$versions.room"
+room.rxjava2 = "androidx.room:room-rxjava2:$versions.room"
+room.testing = "androidx.room:room-testing:$versions.room"
+deps.room = room
+
+def lifecycle = [:]
+lifecycle.runtime = "androidx.lifecycle:lifecycle-runtime:$versions.lifecycle"
+lifecycle.java8 = "androidx.lifecycle:lifecycle-common-java8:$versions.lifecycle"
+lifecycle.compiler = "androidx.lifecycle:lifecycle-compiler:$versions.lifecycle"
+lifecycle.viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle"
+lifecycle.livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycle"
+lifecycle.extensions = "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
+lifecycle.process = "androidx.lifecycle:lifecycle-process:$versions.process"
+deps.lifecycle = lifecycle
+
+def arch_core = [:]
+arch_core.runtime = "androidx.arch.core:core-runtime:$versions.arch_core"
+arch_core.testing = "androidx.arch.core:core-testing:$versions.arch_core"
+deps.arch_core = arch_core
+
+def retrofit = [:]
+retrofit.runtime = "com.squareup.retrofit2:retrofit:$versions.retrofit"
+retrofit.gson = "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+retrofit.mock = "com.squareup.retrofit2:retrofit-mock:$versions.retrofit"
+deps.retrofit = retrofit
+
+def okhttp = [:]
+okhttp.logging_interceptor = "com.squareup.okhttp3:logging-interceptor:${versions.okhttp_version}"
+okhttp.runtime = "com.squareup.okhttp3:okhttp:${versions.okhttp_version}"
+deps.okhttp = okhttp
+
+def dagger = [:]
+dagger.runtime = "com.google.dagger:dagger:$versions.dagger"
+dagger.android = "com.google.dagger:dagger-android:$versions.dagger"
+dagger.android_support = "com.google.dagger:dagger-android-support:$versions.dagger"
+dagger.compiler = "com.google.dagger:dagger-compiler:$versions.dagger"
+dagger.android_support_compiler = "com.google.dagger:dagger-android-processor:$versions.dagger"
+deps.dagger = dagger
+
+def espresso = [:]
+espresso.core = "androidx.test.espresso:espresso-core:$versions.espresso"
+espresso.contrib = "androidx.test.espresso:espresso-contrib:$versions.espresso"
+espresso.intents = "androidx.test.espresso:espresso-intents:$versions.espresso"
+deps.espresso = espresso
+
+def atsl = [:]
+atsl.core = "androidx.test:core:$versions.atsl_core"
+atsl.ext_junit = "androidx.test.ext:junit:$versions.atsl_junit"
+atsl.runner = "androidx.test:runner:$versions.atsl_runner"
+atsl.rules = "androidx.test:rules:$versions.atsl_rules"
+deps.atsl = atsl
+
+def mockito = [:]
+mockito.core = "org.mockito:mockito-core:$versions.mockito"
+mockito.all = "org.mockito:mockito-all:$versions.mockito_all"
+mockito.android = "org.mockito:mockito-android:$versions.mockito_android"
+deps.mockito = mockito
+
+deps.paging_ktx = "androidx.paging:paging-runtime-ktx:$versions.paging"
+
+def glide = [:]
+glide.runtime = "com.github.bumptech.glide:glide:$versions.glide"
+glide.compiler = "com.github.bumptech.glide:compiler:$versions.glide"
+deps.glide = glide
+
+def build_versions = [:]
+build_versions.min_sdk = 14
+build_versions.target_sdk = 28
+build_versions.build_tools = "28.0.3"
+ext.build_versions = build_versions
+
+def work = [:]
+work.runtime = "androidx.work:work-runtime:$versions.work"
+work.testing = "androidx.work:work-testing:$versions.work"
+work.firebase = "androidx.work:work-gcm:$versions.work"
+deps.work = work
+
+def firebase = [:]
+firebase.appIndexing = "com.google.firebase:firebase-appindexing:19.1.0"
+firebase.analytics = 'com.google.firebase:firebase-analytics:17.2.1'
+firebase.config = 'com.google.firebase:firebase-config:19.1.2'
+firebase.messaging = 'com.google.firebase:firebase-messaging:20.1.0'
+firebase.perf = 'com.google.firebase:firebase-perf:19.0.5'
+deps.firebase = firebase
+
+def ads = [:]
+ads.mopub_mediation = 'com.google.ads.mediation:mopub:5.10.0.0'
+ads.fb_mediation = 'com.google.ads.mediation:facebook:5.7.1.0'
+ads.applovin_mediation ='com.google.ads.mediation:applovin:9.9.1.2'
+ads.unity = 'com.unity3d.ads:unity-ads:3.4.2'
+ads.unity_mediation = 'com.google.ads.mediation:unity:3.4.2.0'
+ads.amazon = 'com.amazon.android:aps-sdk:8.2.1@aar'
+ads.amazon_adapter = 'com.amazon.android:aps-admob-adapter:1.2.0@aar'
+ads.verizon = 'com.google.ads.mediation:verizonmedia:1.3.1.0'
+ads.verizon_adapter = 'com.google.ads.mediation:verizonmedia:1.3.1.0'
+deps.ads = ads
+
+def playServices = [:]
+playServices.ads = 'com.google.android.gms:play-services-ads:18.3.0'
+playServices.identifier = 'com.google.android.gms:play-services-ads-identifier:17.0.0'
+playServices.base = 'com.google.android.gms:play-services-base:17.1.0'
+deps.playServices = playServices
+
+def slices = [:]
+slices.core = 'androidx.slice:slice-core:1.0.0'
+slices.builders = 'androidx.slice:slice-builders:1.0.0'
+deps.slices = slices
+
+def navigation = [:]
+navigation.runtime = "androidx.navigation:navigation-runtime:$versions.navigation"
+navigation.runtime_ktx = "androidx.navigation:navigation-runtime-ktx:$versions.navigation"
+navigation.fragment = "androidx.navigation:navigation-fragment:$versions.navigation"
+navigation.fragment_ktx = "androidx.navigation:navigation-fragment-ktx:$versions.navigation"
+navigation.ui = "androidx.navigation:navigation-ui:$versions.navigation"
+navigation.ui_ktx = "androidx.navigation:navigation-ui-ktx:$versions.navigation"
+navigation.safe_args_plugin = "androidx.navigation:navigation-safe-args-gradle-plugin:$versions.navigation"
+deps.navigation = navigation
+
+//external deps
+deps.constraint_layout = "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
+deps.junit = "junit:junit:$versions.junit"
+deps.mock_web_server = "com.squareup.okhttp3:mockwebserver:$versions.mockwebserver"
+deps.rxjava2 = "io.reactivex.rxjava2:rxjava:$versions.rxjava2"
+deps.rx_android = "io.reactivex.rxjava2:rxandroid:$versions.rx_android"
+deps.android_gradle_plugin = "com.android.tools.build:gradle:$versions.android_gradle_plugin"
+deps.robolectric = "org.robolectric:robolectric:$versions.robolectric"
+deps.gson = "com.google.code.gson:gson:$versions.gson"
+deps.moengage = "com.moengage:moe-android-sdk:10.0.01"
+deps.multidex = 'com.android.support:multidex:1.0.0'
+deps.location = 'com.google.android.gms:play-services-location:17.0.0'
+deps.branch = 'io.branch.sdk.android:library:4.1.2'
+deps.soomla = 'com.soomla:android-agent:5.4.0'
+deps.googlePlayCore = 'com.google.android.play:core:1.6.4'
+deps.browser = 'androidx.browser:browser:1.0.0'
+ext.deps = deps
+
+
+def addRepos(RepositoryHandler handler) {
+    handler.google()
+    handler.jcenter()
+    handler.maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+}
+ext.addRepos = this.&addRepos
