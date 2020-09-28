@@ -30,7 +30,7 @@ class TrendingItemViewModel constructor(
             languageColor.value = it.languageColor
             stars.value = NumberFormat.getNumberInstance(Locale.US).format(it.stars)
             forks.value = NumberFormat.getNumberInstance(Locale.US).format(it.forks)
-            this.expanded.value = trendingRepoData.expanded
+            expanded.value = it.expanded?: false
         }
     }
 
