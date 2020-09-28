@@ -25,15 +25,14 @@ class TrendingActivity : AppCompatActivity(), HasAndroidInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        binding =
-            DataBindingUtil.setContentView(this, R.layout.trending_layout)
+        binding = DataBindingUtil.setContentView(this, R.layout.trending_layout)
 
         binding.toolbar.overflowIcon = ContextCompat.getDrawable(this, R.drawable.more_black)
         setSupportActionBar(binding.toolbar)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
+                    .replace(R.id.container, MainFragment.newInstance(), MainFragment.TAG)
                     .commitNow()
         }
     }
@@ -48,8 +47,14 @@ class TrendingActivity : AppCompatActivity(), HasAndroidInjector {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_stars -> true
-            R.id.action_name -> true
+            R.id.action_stars,
+            R.id.action_name -> {
+                val fragment = supportFragmentManager.findFragmentByTag(MainFragment.TAG)
+                if (fragment is MainFragment) {
+                    fragment.sortData(item.itemId)
+                }
+                return true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
