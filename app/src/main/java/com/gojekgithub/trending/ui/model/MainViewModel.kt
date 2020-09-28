@@ -46,7 +46,7 @@ class MainViewModel constructor(
                 gitRepos.value!!.data?.let {
                     val data = arrayListOf<GitRepositoryModel>()
                     data.addAll(it)
-                    data.sortByDescending { repoModel ->
+                    data.sortBy { repoModel ->
                         repoModel.name
                     }
                     gitRepos.value = Resource.success(data)
@@ -64,7 +64,11 @@ class MainViewModel constructor(
                         gitRepos.postValue(Resource.success(it.body()))
                     } else gitRepos.postValue(Resource.error(it.errorBody().toString(), null))
                 }
-            } else gitRepos.postValue(Resource.error("No internet connection", null))
+            } else gitRepos.postValue(Resource.error(ERROR_MSG, null))
         }
+    }
+
+    companion object {
+        private const val ERROR_MSG = "No Internet Connection"
     }
 }

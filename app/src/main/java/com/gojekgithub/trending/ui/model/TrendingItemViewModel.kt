@@ -53,6 +53,7 @@ class TrendingItemViewModel constructor(
     fun getDescription(): LiveData<String> {
         return description
     }
+
     fun getLanguage(): LiveData<String> {
         return language
     }
@@ -70,7 +71,7 @@ class TrendingItemViewModel constructor(
     }
 
     fun setExpanded() {
-        val expandedValue = !(this.expanded.value?: false)
+        val expandedValue = !(this.expanded.value ?: false)
         trendingRepoData.expanded = expandedValue
         this.expanded.value = expandedValue
     }
