@@ -1,7 +1,7 @@
 package com.gojekgithub.trending.di
 
 import android.content.Context
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.gojekgithub.trending.data.repo.TrendingRepository
 import com.gojekgithub.trending.ui.main.MainFragment
 import com.gojekgithub.trending.ui.model.MainViewModel
@@ -25,11 +25,8 @@ class TrendingViewModelModule {
     }
 
     @Provides
-    fun provideMainViewModel(
-        fragment: MainFragment,
-        factory: TrendingViewModelFactory
-    ): MainViewModel {
-        return ViewModelProviders.of(fragment, factory).get(MainViewModel::class.java)
+    fun provideMainViewModel(fragment: MainFragment, factory: TrendingViewModelFactory): MainViewModel {
+        return ViewModelProvider(fragment, factory).get(MainViewModel::class.java)
     }
 }
 
