@@ -13,5 +13,6 @@ data class GitRepositoryModel (
     @SerializedName("stars") val stars : Int,
     @SerializedName("forks") val forks : Int,
     @SerializedName("currentPeriodStars") val currentPeriodStars : Int,
-    @SerializedName("builtBy") val builtBy : List<BuiltBy>
+    @SerializedName("builtBy") val builtBy : List<BuiltBy>,
+    var expanded : Boolean?= false
 )

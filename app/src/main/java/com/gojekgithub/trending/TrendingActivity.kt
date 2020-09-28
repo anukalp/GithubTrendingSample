@@ -5,13 +5,13 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.gojekgithub.trending.databinding.TrendingLayoutBinding
 import com.gojekgithub.trending.ui.main.MainFragment
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
-import kotlinx.android.synthetic.main.trending_layout.view.*
 import javax.inject.Inject
 
 
@@ -25,12 +25,11 @@ class TrendingActivity : AppCompatActivity(), HasAndroidInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        binding = TrendingLayoutBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        binding =
+            DataBindingUtil.setContentView(this, R.layout.trending_layout)
 
-        view.toolbar.overflowIcon = ContextCompat.getDrawable(this, R.drawable.more_black)
-        setSupportActionBar(view.toolbar)
+        binding.toolbar.overflowIcon = ContextCompat.getDrawable(this, R.drawable.more_black)
+        setSupportActionBar(binding.toolbar)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()

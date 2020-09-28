@@ -1,76 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.main.MainFragment">
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerLayout"
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.gojekgithub.trending.utils.Status" />
+
+        <variable
+            name="retryCallback"
+            type="com.gojekgithub.trending.ui.callbacks.TrendingRetryListener" />
+
+        <variable
+            name="owner"
+            type="androidx.lifecycle.LifecycleOwner" />
+
+        <variable
+            name="itemViewModel"
+            type="com.gojekgithub.trending.ui.model.MainViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:shimmer_repeat_mode="restart"
-        app:shimmer_shape="radial">
+        tools:context=".ui.main.MainFragment">
 
-        <LinearLayout
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:orientation="vertical">
+            app:shimmer="@{itemViewModel.repos.status}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:shimmer_repeat_mode="restart"
+            app:shimmer_shape="radial">
 
-            <include layout="@layout/shimmer_layout"></include>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                android:orientation="vertical">
 
-            <include layout="@layout/shimmer_layout"></include>
+                <include layout="@layout/shimmer_layout"></include>
 
-            <include layout="@layout/shimmer_layout"></include>
+                <include layout="@layout/shimmer_layout"></include>
 
-            <include layout="@layout/shimmer_layout"></include>
+                <include layout="@layout/shimmer_layout"></include>
 
-            <include layout="@layout/shimmer_layout"></include>
+                <include layout="@layout/shimmer_layout"></include>
 
-            <include layout="@layout/shimmer_layout"></include>
+                <include layout="@layout/shimmer_layout"></include>
 
-            <include layout="@layout/shimmer_layout"></include>
+                <include layout="@layout/shimmer_layout"></include>
 
-            <include layout="@layout/shimmer_layout"></include>
+                <include layout="@layout/shimmer_layout"></include>
 
-            <include layout="@layout/shimmer_layout"></include>
+                <include layout="@layout/shimmer_layout"></include>
 
-            <include layout="@layout/shimmer_layout"></include>
+                <include layout="@layout/shimmer_layout"></include>
 
-            <include layout="@layout/shimmer_layout"></include>
+                <include layout="@layout/shimmer_layout"></include>
 
-            <include layout="@layout/shimmer_layout"></include>
+                <include layout="@layout/shimmer_layout"></include>
 
-            <include layout="@layout/shimmer_layout"></include>
+                <include layout="@layout/shimmer_layout"></include>
 
-            <include layout="@layout/shimmer_layout"></include>
+                <include layout="@layout/shimmer_layout"></include>
 
-            <include layout="@layout/shimmer_layout"></include>
+                <include layout="@layout/shimmer_layout"></include>
 
-            <include layout="@layout/shimmer_layout"></include>
+                <include layout="@layout/shimmer_layout"></include>
 
-            <include layout="@layout/shimmer_layout"></include>
+                <include layout="@layout/shimmer_layout"></include>
 
-        </LinearLayout>
-    </com.facebook.shimmer.ShimmerFrameLayout>
+                <include layout="@layout/shimmer_layout"></include>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeContainer"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvItems"
+        <include
+            layout="@layout/error_layout"
+            bind:retryCallback="@{retryCallback}"
+            tools:visibility="gone"
+            android:visibility="@{itemViewModel.repos.status == Status.Error ? View.VISIBLE : View.GONE}"></include>
+
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true" />
+            android:layout_height="match_parent"
+            android:visibility="@{itemViewModel.repos.status == Status.Success ? View.VISIBLE : View.GONE}"
+            tools:visibility="visible">
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:scrollbars="none"
+                tools:visibility="visible"
+                app:lifecycleOwner="@{owner}"
+                app:trendingItems="@{itemViewModel.repos.data}" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

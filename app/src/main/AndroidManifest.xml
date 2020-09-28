@@ -3,6 +3,8 @@
     package="com.gojekgithub.trending">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name=".TrendingApplication"
         android:allowBackup="true"

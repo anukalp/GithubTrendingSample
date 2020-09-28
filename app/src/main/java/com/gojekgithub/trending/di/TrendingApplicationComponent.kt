@@ -6,7 +6,7 @@ import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [TrendingAppModule::class, TrendingApplicationModule::class, AndroidSupportInjectionModule::class])
+@Component(modules = [TrendingAppModule::class, TrendingApplicationModule::class,TrendingNetworkingModule::class, AndroidSupportInjectionModule::class])
 interface TrendingApplicationComponent {
     fun inject(application: TrendingApplication?)
 }

@@ -6,6 +6,6 @@ import dagger.android.ContributesAndroidInjector
 
 @Module
 internal abstract class TrendingApplicationModule {
-    @ContributesAndroidInjector
-    abstract fun testMainActivity(): TrendingActivity?
+    @ContributesAndroidInjector(modules = [TrendingFragmentModule::class])
+    abstract fun mainActivity(): TrendingActivity?
 }

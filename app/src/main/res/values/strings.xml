@@ -3,4 +3,6 @@
     <string name="font_fontFamily_medium">sans-serif-medium</string>
     <string name="sort_stars">Sort by stars</string>
     <string name="sort_name">Sort by name</string>
+    <string name="font_fontFamily_regular">sans-serif</string>
+    <string name="font_fontFamily_bold">sans-serif-bold</string>
 </resources>

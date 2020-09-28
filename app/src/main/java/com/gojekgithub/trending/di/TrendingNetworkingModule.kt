@@ -53,6 +53,7 @@ class TrendingNetworkingModule {
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit): TrendingApiService = retrofit.create(TrendingApiService::class.java)
+    fun provideApiService(retrofit: Retrofit): TrendingApiService =
+        retrofit.create(TrendingApiService::class.java)
 
 }

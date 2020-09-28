@@ -18,7 +18,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField 'String', 'BASE_URL', "\"https://ghapi.huchen.dev/repositories\""
+        buildConfigField 'String', 'BASE_URL', "\"https://ghapi.huchen.dev/\""
     }
 
     buildTypes {
@@ -30,7 +30,7 @@ android {
 
     buildFeatures {
         // for view binding:
-        viewBinding = true
+        dataBinding = true
     }
 
     compileOptions {
@@ -53,6 +53,10 @@ dependencies {
     implementation deps.lifecycle.extensions
     implementation deps.lifecycle.viewmodel_ktx
     implementation deps.lifecycle.process
+
+    //Glide Dependencies
+    implementation deps.glide.runtime
+    kapt deps.glide.compiler
 
     //Kotlin Dependencies
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
