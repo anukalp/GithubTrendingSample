@@ -33,6 +33,11 @@ android {
         dataBinding = true
     }
 
+    sourceSets {
+        androidTest.java.srcDirs += "src/test-common/java"
+        test.java.srcDirs += "src/test-common/java"
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -80,6 +85,11 @@ dependencies {
 
     //Testing Dependencies
     testImplementation 'junit:junit:4.12'
+    testImplementation deps.mock_web_server
+    testImplementation deps.arch_core.testing
+    testImplementation deps.mockito.core
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9'
+
     androidTestImplementation deps.retrofit.mock
     androidTestImplementation "androidx.test:runner:1.1.1"
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
