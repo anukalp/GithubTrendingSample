@@ -8,10 +8,11 @@ import com.gojekgithub.trending.R
 import com.gojekgithub.trending.data.model.GitRepositoryModel
 import com.gojekgithub.trending.data.repo.TrendingRepository
 import com.gojekgithub.trending.utils.NetworkHelper
-import com.gojekgithub.trending.utils.NetworkResponse
-import com.gojekgithub.trending.utils.Resource
-import com.gojekgithub.trending.utils.Status
+import com.gojekgithub.trending.constants.NetworkResponse
+import com.gojekgithub.trending.constants.Resource
+import com.gojekgithub.trending.constants.Status
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -76,10 +77,16 @@ class MainViewModel constructor(
             if (networkHelper.isNetworkConnected()) {
                 mainRepository.getRepositories().onStart {
                     gitRepos.postValue(Resource.loading(null))
+                }.catch { e -> gitRepos.postValue(Resource.error(e.toString(), null))
                 }.collect {
                     when (it) {
                         is NetworkResponse.Success -> gitRepos.postValue(Resource.success(it.data))
-                        is NetworkResponse.Error -> gitRepos.postValue(Resource.error(it.data.toString(), null))
+                        is NetworkResponse.Error -> gitRepos.postValue(
+                            Resource.error(
+                                it.data.toString(),
+                                null
+                            )
+                        )
                         else -> gitRepos.postValue(Resource.loading(null))
                     }
                 }

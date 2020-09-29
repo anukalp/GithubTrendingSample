@@ -1,4 +1,4 @@
-package com.gojekgithub.trending.utils
+package com.gojekgithub.trending.constants
 
 data class Resource<out T>(@Status val status: Int, val data: T?, val message: String?) {
 

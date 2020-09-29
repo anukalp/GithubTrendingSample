@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.facebook.shimmer.ShimmerFrameLayout
+import com.gojekgithub.trending.constants.Status
 import com.gojekgithub.trending.data.model.GitRepositoryModel
 import com.gojekgithub.trending.ui.main.TrendingRecyclerViewAdapter
 

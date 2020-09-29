@@ -1,4 +1,4 @@
-package com.gojekgithub.trending.utils
+package com.gojekgithub.trending.constants
 
 import java.lang.Exception
 

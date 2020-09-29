@@ -7,8 +7,8 @@ import com.gojekgithub.trending.data.model.GitRepositoryModel
 import com.gojekgithub.trending.data.repo.TrendingRepository
 import com.gojekgithub.trending.util.getOrAwaitValue
 import com.gojekgithub.trending.utils.NetworkHelper
-import com.gojekgithub.trending.utils.NetworkResponse
-import com.gojekgithub.trending.utils.Status
+import com.gojekgithub.trending.constants.NetworkResponse
+import com.gojekgithub.trending.constants.Status
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.delay

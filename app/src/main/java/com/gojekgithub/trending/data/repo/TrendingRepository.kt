@@ -1,9 +1,7 @@
 package com.gojekgithub.trending.data.repo
 
+import com.gojekgithub.trending.constants.NetworkResponse
 import com.gojekgithub.trending.data.api.TrendingApiService
-import com.gojekgithub.trending.data.model.GitRepositoryModel
-import com.gojekgithub.trending.utils.NetworkResponse
-import com.gojekgithub.trending.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
