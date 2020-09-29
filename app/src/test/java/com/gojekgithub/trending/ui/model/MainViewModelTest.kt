@@ -3,12 +3,13 @@ package com.gojekgithub.trending.ui.model
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.gojekgithub.trending.CoroutinesTestRule
 import com.gojekgithub.trending.R
+import com.gojekgithub.trending.constants.FilterResponse
+import com.gojekgithub.trending.constants.NetworkResponse
+import com.gojekgithub.trending.constants.Status
 import com.gojekgithub.trending.data.model.GitRepositoryModel
 import com.gojekgithub.trending.data.repo.TrendingRepository
 import com.gojekgithub.trending.util.getOrAwaitValue
 import com.gojekgithub.trending.utils.NetworkHelper
-import com.gojekgithub.trending.constants.NetworkResponse
-import com.gojekgithub.trending.constants.Status
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.delay
@@ -20,6 +21,8 @@ import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mockito
 import java.io.InputStreamReader
 
@@ -29,8 +32,6 @@ class MainViewModelTest {
     private val networkHelper = Mockito.mock(NetworkHelper::class.java)
     private lateinit var mainViewModel: MainViewModel
     private val gson = Gson()
-
-    private val testDispatcher = TestCoroutineDispatcher()
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -51,7 +52,7 @@ class MainViewModelTest {
         }
 
     @Test
-    fun `test verify loading State`() = coroutinesTestRule.testDispatcher.runBlockingTest {
+    fun `test verify loading state`() = coroutinesTestRule.testDispatcher.runBlockingTest {
         val reader: InputStreamReader =
             javaClass.classLoader.getResourceAsStream("api-response/repos-git.json").reader()
         val result: List<GitRepositoryModel> = gson.fromJson(
@@ -80,7 +81,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `test verify network success`() = testDispatcher.runBlockingTest {
+    fun `test verify network success`() = coroutinesTestRule.testDispatcher.runBlockingTest {
         val reader: InputStreamReader =
             javaClass.classLoader.getResourceAsStream("api-response/repos-git.json").reader()
         val result: List<GitRepositoryModel> = gson.fromJson(
@@ -100,7 +101,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `test verify network success and null body`() = testDispatcher.runBlockingTest {
+    fun `test verify network success and null body`() = coroutinesTestRule.testDispatcher.runBlockingTest {
         Mockito.`when`(networkHelper.isNetworkConnected()).thenReturn(true)
         Mockito.`when`(trendingRepository.getRepositories()).thenReturn(flow {
             emit(NetworkResponse.Success(null))
@@ -114,7 +115,25 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `test verify network error Response`() = testDispatcher.runBlockingTest {
+    fun `test verify repo throws exception`() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        Mockito.`when`(networkHelper.isNetworkConnected()).thenReturn(true)
+        Mockito.`when`(trendingRepository.getRepositories()).thenReturn(flow {
+            throw Exception("Error in repo!")
+        })
+        mainViewModel = MainViewModel(trendingRepository, networkHelper)
+        val resource = mainViewModel.repos.value
+        MatcherAssert.assertThat(mainViewModel.repos, CoreMatchers.notNullValue())
+        MatcherAssert.assertThat(resource!!.status, CoreMatchers.`is`(Status.Error))
+        MatcherAssert.assertThat(resource!!.data, CoreMatchers.nullValue())
+        MatcherAssert.assertThat(
+            resource!!.message,
+            CoreMatchers.`is`("java.lang.Exception: Error in repo!")
+        )
+        Mockito.verify(trendingRepository, Mockito.times(1)).getRepositories()
+    }
+
+    @Test
+    fun `test verify network error response`() = coroutinesTestRule.testDispatcher.runBlockingTest {
         Mockito.`when`(networkHelper.isNetworkConnected()).thenReturn(true)
         Mockito.`when`(trendingRepository.getRepositories()).thenReturn(flow {
             emit(NetworkResponse.Error(Exception("400 bad request")))
@@ -133,54 +152,58 @@ class MainViewModelTest {
 
 
     @Test
-    fun `test verify sort by stars`() = testDispatcher.runBlockingTest {
-        val reader: InputStreamReader =
-            javaClass.classLoader.getResourceAsStream("api-response/repos-git.json").reader()
-        var result: List<GitRepositoryModel> = gson.fromJson(
-            reader,
-            object : TypeToken<List<GitRepositoryModel?>?>() {}.type
-        )
+    fun `test verify sort when not success`() = coroutinesTestRule.testDispatcher.runBlockingTest {
         Mockito.`when`(networkHelper.isNetworkConnected()).thenReturn(true)
-        Mockito.`when`(trendingRepository.getRepositories()).thenReturn(flow {
-            emit(NetworkResponse.Success(result))
-        })
+        val testFlow = flow {
+            emit(NetworkResponse.Error(Exception("400 bad request")))
+        }
+        Mockito.`when`(trendingRepository.getRepositories()).thenReturn(testFlow)
 
         mainViewModel = MainViewModel(trendingRepository, networkHelper)
-        mainViewModel.sortData(R.id.action_stars)
 
-        result = result.sortedByDescending { repoModel ->
-            repoModel.stars
+        testFlow.collect {
+            mainViewModel.sortData(R.id.action_name)
+            Mockito.verify(trendingRepository, Mockito.never()).filterRepos(anyInt(), any())
         }
-        val resource = mainViewModel.repos.getOrAwaitValue()
-        MatcherAssert.assertThat(resource, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(resource.status, CoreMatchers.`is`(Status.Success))
-        MatcherAssert.assertThat(resource.data, CoreMatchers.`is`(result))
     }
 
-
     @Test
-    fun `test verify sort by name`()  = testDispatcher.runBlockingTest {
+    fun `test verify sort when success`() = coroutinesTestRule.testDispatcher.runBlockingTest {
         val reader: InputStreamReader =
             javaClass.classLoader.getResourceAsStream("api-response/repos-git.json").reader()
-        var result: List<GitRepositoryModel> = gson.fromJson(
+        val result: List<GitRepositoryModel> = gson.fromJson(
             reader,
             object : TypeToken<List<GitRepositoryModel?>?>() {}.type
         )
         Mockito.`when`(networkHelper.isNetworkConnected()).thenReturn(true)
-        Mockito.`when`(trendingRepository.getRepositories()).thenReturn(flow {
+        val testFlow = flow {
             emit(NetworkResponse.Success(result))
-        })
+        }
+        Mockito.`when`(trendingRepository.getRepositories()).thenReturn(testFlow)
 
         mainViewModel = MainViewModel(trendingRepository, networkHelper)
-        mainViewModel.sortData(R.id.action_name)
 
-        result = result.sortedBy { repoModel ->
-            repoModel.name
+        val data = arrayListOf<GitRepositoryModel>()
+        data.addAll(result)
+        data.sortByDescending { repoModel ->
+            repoModel.stars
         }
+        Mockito.`when`(
+            trendingRepository.filterRepos(
+                R.id.action_name,
+                mainViewModel.repos.value!!.data
+            )
+        ).thenReturn(
+            flow {
+                emit(FilterResponse.Success(data))
+            })
+        mainViewModel.sortData(R.id.action_name)
+        Mockito.verify(trendingRepository, Mockito.times(1)).filterRepos(anyInt(), any())
+
         val resource = mainViewModel.repos.getOrAwaitValue()
-        MatcherAssert.assertThat(resource, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(resource.status, CoreMatchers.`is`(Status.Success))
-        MatcherAssert.assertThat(resource.data, CoreMatchers.`is`(result))
+        MatcherAssert.assertThat(mainViewModel.repos, CoreMatchers.notNullValue())
+        MatcherAssert.assertThat(resource!!.status, CoreMatchers.`is`(Status.Success))
+        MatcherAssert.assertThat(resource!!.data, CoreMatchers.`is`(data))
     }
 
 

@@ -5,7 +5,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.gojekgithub.trending.CoroutinesTestRule
 import com.gojekgithub.trending.data.repo.TrendingRepository
 import com.gojekgithub.trending.utils.NetworkHelper
-import com.google.gson.Gson
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.Before
@@ -19,7 +18,6 @@ class TrendingItemViewModelTest {
     private val trendingRepository = Mockito.mock(TrendingRepository::class.java)
     private val networkHelper = Mockito.mock(NetworkHelper::class.java)
     private lateinit var viewModel: TrendingViewModelFactory
-    private val gson = Gson()
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()

@@ -104,13 +104,65 @@ class NetworkHelperTest {
             NetworkInfo.State.CONNECTED  /* isConnected */
         )
         shadowOf(connectivityManager).setActiveNetworkInfo(networkInfo)
+        MatcherAssert.assertThat(networkHelper.isNetworkConnected(), CoreMatchers.`is`(false))
+    }
+
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
+    fun `test active network capability on lollipop is Wifi`() {
+        val networkInfo = ShadowNetworkInfo.newInstance(
+            NetworkInfo.DetailedState.CONNECTED,
+            ConnectivityManager.TYPE_WIFI,
+            0 /* subType */,
+            true /* isAvailable */,
+            NetworkInfo.State.CONNECTED  /* isConnected */
+        )
+        shadowOf(connectivityManager).setActiveNetworkInfo(networkInfo)
         MatcherAssert.assertThat(networkHelper.isNetworkConnected(), CoreMatchers.`is`(true))
     }
 
 
+    @Test
     @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
-    fun `test null view model`() {
+    fun `test active network capability on lollipop is Cellular`() {
+        val networkInfo = ShadowNetworkInfo.newInstance(
+            NetworkInfo.DetailedState.CONNECTED,
+            ConnectivityManager.TYPE_MOBILE,
+            0 /* subType */,
+            true /* isAvailable */,
+            NetworkInfo.State.CONNECTED  /* isConnected */
+        )
+        shadowOf(connectivityManager).setActiveNetworkInfo(networkInfo)
+        MatcherAssert.assertThat(networkHelper.isNetworkConnected(), CoreMatchers.`is`(true))
+    }
 
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
+    fun `test active network capability on lollipop is Ethernet`() {
+        val networkInfo = ShadowNetworkInfo.newInstance(
+            NetworkInfo.DetailedState.CONNECTED,
+            ConnectivityManager.TYPE_ETHERNET,
+            0 /* subType */,
+            true /* isAvailable */,
+            NetworkInfo.State.CONNECTED  /* isConnected */
+        )
+        shadowOf(connectivityManager).setActiveNetworkInfo(networkInfo)
+        MatcherAssert.assertThat(networkHelper.isNetworkConnected(), CoreMatchers.`is`(true))
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
+    fun `test active network capability on lollipop is dummy`() {
+        val networkInfo = ShadowNetworkInfo.newInstance(
+            NetworkInfo.DetailedState.CONNECTED,
+            ConnectivityManager.TYPE_DUMMY,
+            0 /* subType */,
+            true /* isAvailable */,
+            NetworkInfo.State.CONNECTED  /* isConnected */
+        )
+        shadowOf(connectivityManager).setActiveNetworkInfo(networkInfo)
+        MatcherAssert.assertThat(networkHelper.isNetworkConnected(), CoreMatchers.`is`(false))
     }
 
 }
