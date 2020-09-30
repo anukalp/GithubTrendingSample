@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit
  * Added to make sure the tests run's slowly and user interaction could be seen
  */
 object CountDownTestUtil {
-    fun waitForUI() {
+    fun waitForUI(time: Long, timeUnit: TimeUnit = TimeUnit.SECONDS) {
         val latch = CountDownLatch(1)
-        latch.await(2, TimeUnit.SECONDS)
+        latch.await(time, timeUnit)
     }
 }

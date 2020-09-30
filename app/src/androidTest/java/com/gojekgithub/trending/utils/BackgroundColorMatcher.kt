@@ -41,7 +41,7 @@ class BackgroundColorMatcher private constructor(private val colorChecker: Color
          */
         @CheckResult
         fun withDrawableRes(@ColorInt drawableRes: Int): Matcher<View> {
-            return BackgroundColorMatcher(ColorChecker.Companion.from(drawableRes))
+            return BackgroundColorMatcher(ColorChecker.from(drawableRes))
         }
 
         /**

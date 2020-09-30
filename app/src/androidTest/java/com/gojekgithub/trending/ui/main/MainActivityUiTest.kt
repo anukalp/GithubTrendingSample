@@ -3,7 +3,6 @@ package com.gojekgithub.trending.ui.main
 import android.content.Intent
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
@@ -12,11 +11,9 @@ import androidx.test.rule.ActivityTestRule
 import com.gojekgithub.trending.R
 import com.gojekgithub.trending.TestTrendingApplication
 import com.gojekgithub.trending.data.model.GitRepositoryModel
-import com.gojekgithub.trending.ui.holder.TrendingItemViewHolder
-import com.gojekgithub.trending.utils.BackgroundColorMatcher
 import com.gojekgithub.trending.utils.CountDownTestUtil
 import com.gojekgithub.trending.utils.EspressoTestUtil
-import com.gojekgithub.trending.utils.RecyclerViewMatcher
+import com.gojekgithub.trending.utils.MainRecyclerViewValidations.validateUIForRecyclerView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.mockwebserver.MockResponse
@@ -27,8 +24,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.io.InputStreamReader
-import java.text.NumberFormat
-import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -39,7 +34,7 @@ import javax.inject.Inject
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @LargeTest
-class MainActivityTest {
+class MainActivityUiTest {
 
     /**
      * Use [ActivityScenarioRule] to create and launch the activity under test, and close it
@@ -64,7 +59,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun testActivityUiElements_when_Loading() {
+    fun testActivity_UiElements_When_Loading() {
         val reader: InputStreamReader =
             javaClass.classLoader.getResourceAsStream("api-response/repos-git.json").reader()
         val result: List<GitRepositoryModel> = gson.fromJson(
@@ -95,7 +90,7 @@ class MainActivityTest {
         onView(withId(R.id.layout_error)).check(matches(withEffectiveVisibility(Visibility.GONE)))
 
         //Added delay to see loading to recycler view ui
-        CountDownTestUtil.waitForUI()
+        CountDownTestUtil.waitForUI(2)
 
         onView(withId(R.id.shimmerLayout)).check(matches(withEffectiveVisibility(Visibility.GONE)))
         onView(withId(R.id.layout_error)).check(matches(withEffectiveVisibility(Visibility.GONE)))
@@ -106,7 +101,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun testActivityUiElements_when_ResponseError() {
+    fun testActivity_UiElements_When_ResponseError() {
         mockWebServer.enqueue(MockResponse().setResponseCode(500).setBody("Internal Server Error"))
         val intent = Intent(
             InstrumentationRegistry.getInstrumentation()
@@ -124,7 +119,7 @@ class MainActivityTest {
         MatcherAssert.assertThat(fragment, CoreMatchers.notNullValue())
 
         //Added delay to see espresso test in effect
-        CountDownTestUtil.waitForUI()
+        CountDownTestUtil.waitForUI(1)
 
         onView(withId(R.id.shimmerLayout)).check(matches(withEffectiveVisibility(Visibility.GONE)))
         onView(withId(R.id.swipeContainer)).check(matches(withEffectiveVisibility(Visibility.GONE)))
@@ -136,7 +131,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun testActivityUiElements_when_response_success() {
+    fun testActivityUiElements_When_ResponseSuccess() {
         val reader: InputStreamReader =
             javaClass.classLoader.getResourceAsStream("api-response/repos-git.json").reader()
         val result: List<GitRepositoryModel> = gson.fromJson(
@@ -169,81 +164,6 @@ class MainActivityTest {
         onView(withId(R.id.listView)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         validateUIForRecyclerView(result)
 
-    }
-
-    private fun validateUIForRecyclerView(
-        githubRepoDetails: List<GitRepositoryModel>,
-        collapsed: Boolean = true
-    ) {
-        val matcher = RecyclerViewMatcher(R.id.listView)
-
-        for (pos in githubRepoDetails.indices) {
-
-            onView(withId(R.id.listView)).perform(scrollToPosition<TrendingItemViewHolder>(pos))
-
-            val repoDetails: GitRepositoryModel = githubRepoDetails[pos]
-            val stars = NumberFormat.getNumberInstance(Locale.US).format(repoDetails.stars)
-            val forks = NumberFormat.getNumberInstance(Locale.US).format(repoDetails.forks)
-            val description = "${repoDetails.description}(${repoDetails.url})"
-
-            onView(matcher.atPositionWithTargetId(pos, R.id.description))
-                .check(matches(isDisplayed()))
-                .check(matches(withText(description)))
-
-            onView(matcher.atPositionWithTargetId(pos, R.id.profileImage))
-                .check(matches(isDisplayed()))
-
-            onView(matcher.atPositionWithTargetId(pos, R.id.author))
-                .check(matches(isDisplayed()))
-                .check(matches(withText(repoDetails.author)))
-            onView(matcher.atPositionWithTargetId(pos, R.id.title))
-                .check(matches(isDisplayed()))
-                .check(matches(withText(repoDetails.name)))
-
-            if(collapsed){
-                onView(matcher.atPositionWithTargetId(pos, R.id.language))
-                    .check(matches(CoreMatchers.not(isDisplayed())))
-                onView(matcher.atPositionWithTargetId(pos, R.id.languageColor))
-                    .check(matches(CoreMatchers.not(isDisplayed())))
-
-                onView(matcher.atPositionWithTargetId(pos, R.id.languageColor))
-                    .check(matches(CoreMatchers.not(isDisplayed())))
-                    .check(matches(BackgroundColorMatcher.withDrawableBackground(repoDetails.languageColor)))
-
-                onView(matcher.atPositionWithTargetId(pos, R.id.stars))
-                    .check(matches(CoreMatchers.not(isDisplayed())))
-                onView(matcher.atPositionWithTargetId(pos, R.id.stars_text))
-                    .check(matches(CoreMatchers.not(isDisplayed())))
-                    .check(matches(withText(stars)))
-                onView(matcher.atPositionWithTargetId(pos, R.id.forks))
-                    .check(matches(CoreMatchers.not(isDisplayed())))
-
-                onView(matcher.atPositionWithTargetId(pos, R.id.forks_text))
-                    .check(matches(CoreMatchers.not(isDisplayed())))
-                    .check(matches(withText(forks)))
-            } else {
-                onView(matcher.atPositionWithTargetId(pos, R.id.language))
-                    .check(matches(isDisplayed()))
-                onView(matcher.atPositionWithTargetId(pos, R.id.languageColor))
-                    .check(matches(CoreMatchers.not(isDisplayed())))
-                    .check(matches(BackgroundColorMatcher.withDrawableBackground(repoDetails.languageColor)))
-
-                onView(matcher.atPositionWithTargetId(pos, R.id.stars))
-                    .check(matches(isDisplayed()))
-                onView(matcher.atPositionWithTargetId(pos, R.id.stars_text))
-                    .check(matches(isDisplayed()))
-                    .check(matches(withText(stars)))
-                onView(matcher.atPositionWithTargetId(pos, R.id.forks))
-                    .check(matches(isDisplayed()))
-
-                onView(matcher.atPositionWithTargetId(pos, R.id.forks_text))
-                    .check(matches(isDisplayed()))
-                    .check(matches(withText(forks)))
-            }
-
-            //Added delay to see espresso tests in effect
-            CountDownTestUtil.waitForUI()
-        }
     }
 
 }

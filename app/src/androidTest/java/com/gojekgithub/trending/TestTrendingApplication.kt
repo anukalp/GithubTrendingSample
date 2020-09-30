@@ -3,7 +3,8 @@ package com.gojekgithub.trending
 import com.gojekgithub.trending.di.DaggerTestApplicationComponent
 import com.gojekgithub.trending.di.TestApplicationComponent
 import com.gojekgithub.trending.di.TrendingAppModule
-import com.gojekgithub.trending.ui.main.MainActivityTest
+import com.gojekgithub.trending.ui.main.MainActivityUiTest
+import com.gojekgithub.trending.ui.main.MainActivityUiClickTest
 
 class TestTrendingApplication : TrendingApplication() {
 
@@ -13,7 +14,12 @@ class TestTrendingApplication : TrendingApplication() {
         daggerAppComponent.inject(this)
     }
 
-    fun inject(baseTest: MainActivityTest) {
+    fun inject(baseUiClickTest: MainActivityUiClickTest) {
+        injectIfNecessary()
+        (daggerAppComponent as TestApplicationComponent).inject(baseUiClickTest)
+    }
+
+    fun inject(baseTest: MainActivityUiTest) {
         injectIfNecessary()
         (daggerAppComponent as TestApplicationComponent).inject(baseTest)
     }

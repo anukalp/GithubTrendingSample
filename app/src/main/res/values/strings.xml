@@ -5,4 +5,7 @@
     <string name="sort_name">Sort by name</string>
     <string name="font_fontFamily_regular">sans-serif</string>
     <string name="font_fontFamily_bold">sans-serif-bold</string>
+    <string name="retry">RETRY</string>
+    <string name="error">Something went wrong ...</string>
+    <string name="error_description">An alien is probably blocking your signal</string>
 </resources>
