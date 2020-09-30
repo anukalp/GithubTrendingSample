@@ -1,23 +1,23 @@
 package com.gojekgithub.trending.ui.model
 
+import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.gojekgithub.trending.CoroutinesTestRule
-import com.gojekgithub.trending.data.model.GitRepositoryModel
-import com.gojekgithub.trending.util.getOrAwaitValue
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.gojekgithub.trending.data.repo.TrendingRepository
+import com.gojekgithub.trending.utils.NetworkHelper
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.io.InputStreamReader
-import java.text.NumberFormat
-import java.util.*
+import org.mockito.Mockito
 
 class TrendingViewModelFactoryTest {
 
-    private lateinit var viewModel: TrendingItemViewModel
-    private val gson = Gson()
+    private val context = Mockito.mock(Application::class.java)
+    private val trendingRepository = Mockito.mock(TrendingRepository::class.java)
+    private val networkHelper = Mockito.mock(NetworkHelper::class.java)
+    private lateinit var viewModel: TrendingViewModelFactory
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -25,84 +25,19 @@ class TrendingViewModelFactoryTest {
     @get:Rule
     val coroutinesTestRule = CoroutinesTestRule()
 
-    @Test
-    fun `test verify live Data`() {
-        val reader: InputStreamReader =
-            javaClass.classLoader.getResourceAsStream("api-response/repos-git.json").reader()
-        var result: List<GitRepositoryModel> = gson.fromJson(
-            reader,
-            object : TypeToken<List<GitRepositoryModel?>?>() {}.type
-        )
-
-        var data = result[0]
-        data.expanded = false
-
-        viewModel = TrendingItemViewModel(data)
-
-        val languageColor = viewModel.getLanguageColor().getOrAwaitValue()
-        val stars = viewModel.getStars().getOrAwaitValue()
-        val forks = viewModel.getForks().getOrAwaitValue()
-        val imageUrl = viewModel.getImageUrl().getOrAwaitValue()
-        val description = viewModel.getDescription().getOrAwaitValue()
-        val language = viewModel.getLanguage().getOrAwaitValue()
-        val title = viewModel.getTitle().getOrAwaitValue()
-        val author = viewModel.getAuthor().getOrAwaitValue()
-        val expanded = viewModel.getExpanded().getOrAwaitValue()
-
-        data?.also {
-            MatcherAssert.assertThat(languageColor, CoreMatchers.`is`(it.languageColor))
-            MatcherAssert.assertThat(imageUrl, CoreMatchers.`is`(it.avatar))
-            MatcherAssert.assertThat(language, CoreMatchers.`is`(it.language))
-            MatcherAssert.assertThat(title, CoreMatchers.`is`(it.name))
-            MatcherAssert.assertThat(author, CoreMatchers.`is`(it.author))
-            MatcherAssert.assertThat(expanded, CoreMatchers.`is`(it.expanded))
-            MatcherAssert.assertThat(stars, CoreMatchers.`is`(NumberFormat.getNumberInstance(Locale.US).format(it.stars)))
-            MatcherAssert.assertThat(forks, CoreMatchers.`is`(NumberFormat.getNumberInstance(Locale.US).format(it.forks)))
-            MatcherAssert.assertThat(description, CoreMatchers.`is`("${it.description}(${it.url})"))
-        }
+    @Before
+    fun setup() {
+        viewModel = TrendingViewModelFactory(context, trendingRepository, networkHelper)
     }
 
     @Test
-    fun `test verify expanded Data`() {
-        val reader: InputStreamReader =
-            javaClass.classLoader.getResourceAsStream("api-response/repos-git.json").reader()
-        var result: List<GitRepositoryModel> = gson.fromJson(
-            reader,
-            object : TypeToken<List<GitRepositoryModel?>?>() {}.type
-        )
+    fun `test main view model`() {
+        MatcherAssert.assertThat(viewModel.create(MainViewModel::class.java), CoreMatchers.notNullValue())
+    }
 
-
-        var data = result[1]
-
-        viewModel = TrendingItemViewModel(data)
-
-        val languageColor = viewModel.getLanguageColor().getOrAwaitValue()
-        val stars = viewModel.getStars().getOrAwaitValue()
-        val forks = viewModel.getForks().getOrAwaitValue()
-        val imageUrl = viewModel.getImageUrl().getOrAwaitValue()
-        val description = viewModel.getDescription().getOrAwaitValue()
-        val language = viewModel.getLanguage().getOrAwaitValue()
-        val title = viewModel.getTitle().getOrAwaitValue()
-        val author = viewModel.getAuthor().getOrAwaitValue()
-        var expanded = viewModel.getExpanded().getOrAwaitValue()
-
-        data?.also {
-            MatcherAssert.assertThat(languageColor, CoreMatchers.`is`(it.languageColor))
-            MatcherAssert.assertThat(imageUrl, CoreMatchers.`is`(it.avatar))
-            MatcherAssert.assertThat(language, CoreMatchers.`is`(it.language))
-            MatcherAssert.assertThat(title, CoreMatchers.`is`(it.name))
-            MatcherAssert.assertThat(author, CoreMatchers.`is`(it.author))
-            MatcherAssert.assertThat(expanded, CoreMatchers.`is`(false))
-            MatcherAssert.assertThat(stars, CoreMatchers.`is`(NumberFormat.getNumberInstance(Locale.US).format(it.stars)))
-            MatcherAssert.assertThat(forks, CoreMatchers.`is`(NumberFormat.getNumberInstance(Locale.US).format(it.forks)))
-            MatcherAssert.assertThat(description, CoreMatchers.`is`("${it.description}(${it.url})"))
-        }
-
-        viewModel.setExpanded()
-        expanded = viewModel.getExpanded().getOrAwaitValue()
-        MatcherAssert.assertThat(expanded, CoreMatchers.`is`(true))
-        MatcherAssert.assertThat(data.expanded, CoreMatchers.`is`(true))
-
+    @Test(expected = RuntimeException::class)
+    fun `test null view model`() {
+        MatcherAssert.assertThat(viewModel.create(TrendingItemViewModel::class.java), CoreMatchers.nullValue())
     }
 
 

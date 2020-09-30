@@ -1,4 +1,4 @@
-package com.gojekgithub.trending
+package com.gojekgithub.trending.ui.main
 
 import android.os.Bundle
 import android.view.Menu
@@ -6,8 +6,8 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import com.gojekgithub.trending.R
 import com.gojekgithub.trending.databinding.TrendingLayoutBinding
-import com.gojekgithub.trending.ui.main.MainFragment
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector

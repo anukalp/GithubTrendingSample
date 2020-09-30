@@ -9,14 +9,14 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
-class TrendingApplication : Application(), HasAndroidInjector {
+open class TrendingApplication : Application(), HasAndroidInjector {
 
     @JvmField
     @Inject
     @Volatile
     var appDispatchingAndroidInjector: DispatchingAndroidInjector<Any>? = null
 
-    private lateinit var daggerAppComponent: TrendingApplicationComponent
+    lateinit var daggerAppComponent: TrendingApplicationComponent
 
     /**
      * Lazily injects the [DaggerTrendingApplicationComponent]'s members. Injection cannot be performed in [ ][Application.onCreate] since [android.content.ContentProvider]s' [ ][android.content.ContentProvider.onCreate] method will be called first and might
@@ -24,7 +24,7 @@ class TrendingApplication : Application(), HasAndroidInjector {
      * that may result in members-injection methods being called before the constructor has completed,
      * allowing for a partially-constructed instance to escape.
      */
-    private fun injectIfNecessary() {
+    fun injectIfNecessary() {
         if (appDispatchingAndroidInjector == null) {
             synchronized(this) {
                 if (appDispatchingAndroidInjector == null) {
@@ -48,10 +48,9 @@ class TrendingApplication : Application(), HasAndroidInjector {
         return appDispatchingAndroidInjector!!
     }
 
-    private fun initApplicationComponents() {
-        val time = System.currentTimeMillis()
+    open fun initApplicationComponents() {
         daggerAppComponent = DaggerTrendingApplicationComponent.builder()
             .trendingAppModule(TrendingAppModule(this@TrendingApplication)).build()
-        daggerAppComponent?.inject(this)
+        daggerAppComponent.inject(this)
     }
 }

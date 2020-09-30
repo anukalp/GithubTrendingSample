@@ -1,5 +1,6 @@
 package com.gojekgithub.trending.ui.model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,7 +16,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import org.jetbrains.annotations.TestOnly
 
 class MainViewModel constructor(
     private val mainRepository: TrendingRepository,
@@ -60,7 +60,12 @@ class MainViewModel constructor(
             if (networkHelper.isNetworkConnected()) {
                 mainRepository.getRepositories().onStart {
                     gitRepos.postValue(Resource.loading(null))
-                }.catch { e -> gitRepos.postValue(Resource.error(e.toString(), null))
+                }.catch { e ->
+                    run {
+                        Log.d("anukalp", "$e")
+                        e.printStackTrace()
+                        gitRepos.postValue(Resource.error(e.toString(), null))
+                    }
                 }.collect {
                     when (it) {
                         is NetworkResponse.Success -> gitRepos.postValue(Resource.success(it.data))

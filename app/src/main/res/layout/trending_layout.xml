@@ -6,7 +6,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".TrendingActivity">
+        tools:context=".ui.main.TrendingActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -31,6 +31,7 @@
                     android:layout_height="match_parent">
 
                     <TextView
+                        android:id="@+id/trending_title"
                         style="@style/ToolbarText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -55,7 +56,7 @@
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".TrendingActivity" />
+                tools:context=".ui.main.TrendingActivity" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

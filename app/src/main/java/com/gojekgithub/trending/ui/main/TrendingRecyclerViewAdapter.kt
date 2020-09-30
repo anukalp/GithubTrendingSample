@@ -29,7 +29,7 @@ class TrendingRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: TrendingItemViewHolder, position: Int) {
-        val trendingRepoData: GitRepositoryModel = trendingRepoList!![position]
+        val trendingRepoData: GitRepositoryModel = trendingRepoList[position]
         holder.bindView(TrendingItemViewModel(trendingRepoData))
     }
 

@@ -1,6 +1,6 @@
 package com.gojekgithub.trending.di
 
-import com.gojekgithub.trending.TrendingActivity
+import com.gojekgithub.trending.ui.main.TrendingActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
