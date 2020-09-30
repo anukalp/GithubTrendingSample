@@ -9,7 +9,7 @@ import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
 /**
- * Custom Matcher used to match recyclerview [position] and child elements value
+ * Custom Matcher used to match recyclerview and child elements value
  * Espresso LifeCycle
  * 1. Interactors
  * 2. Matchers
@@ -33,7 +33,7 @@ class RecyclerViewMatcher(private val recyclerViewId: Int) {
             var resources: Resources? = null
             var childView: View? = null
             override fun describeTo(description: Description) {
-                var idDescription = Integer.toString(recyclerViewId)
+                var idDescription = recyclerViewId.toString()
                 if (resources != null) {
                     idDescription = try {
                         resources!!.getResourceName(recyclerViewId)

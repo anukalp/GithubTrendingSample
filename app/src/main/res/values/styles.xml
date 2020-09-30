@@ -14,35 +14,25 @@
 
     <style name="ToolbarText" parent="TextAppearance.AppCompat.Medium">
         <item name="android:textColor">#25282B</item>
-        <item name="android:textSize">21dp</item>
+        <item name="android:textSize">21sp</item>
         <item name="android:fontFamily">@string/font_fontFamily_medium</item>
     </style>
 
     <style name="AuthorText" parent="TextAppearance.AppCompat.Medium">
         <item name="android:textColor">#52575C</item>
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:fontFamily">@string/font_fontFamily_regular</item>
     </style>
 
     <style name="NameText" parent="TextAppearance.AppCompat.Medium">
         <item name="android:textColor">#52575C</item>
-        <item name="android:textSize">15dp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:fontFamily">@string/font_fontFamily_regular</item>
-    </style>
-
-    <style name="RetryText" parent="TextAppearance.AppCompat.Medium">
-        <item name="android:textColor">#31B057</item>
-        <item name="android:textSize">15dp</item>
-        <item name="android:fontFamily">@string/font_fontFamily_bold</item>
     </style>
 
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="toolbarStyle" parent="Widget.AppCompat.Toolbar">
-        <item name="titleTextColor">#FFFFFF</item>
-    </style>
 
 </resources>

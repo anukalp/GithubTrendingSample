@@ -30,6 +30,8 @@ to refresh the data from remote and purge the cache only after successful data f
 ● App has espresso ui (with custom matchers and mockwebserver) + unit test cases
 ● Retrofit + okhttp for networking and offline support
 ● Follows the solid design principals
+● EspressoTestSuite is created that runs the ui test cases to validate 
+● Added 300 msec delays to show the espresso tests getting run
 
 # Documentation
 Anukalp Katyal(katyalanukalp@gmail.com)

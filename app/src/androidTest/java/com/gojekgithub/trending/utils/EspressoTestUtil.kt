@@ -50,7 +50,7 @@ object EspressoTestUtil {
 
     private fun traverseViewGroup(view: ViewGroup) {
         if (view is RecyclerView) {
-            disableRecyclerViewAnimations(view as RecyclerView)
+            disableRecyclerViewAnimations(view)
         } else {
             val count = view.childCount
             for (i in 0 until count) {
@@ -60,7 +60,7 @@ object EspressoTestUtil {
     }
 
     private fun disableRecyclerViewAnimations(view: RecyclerView) {
-        view.setItemAnimator(null)
+        view.itemAnimator = null
     }
 
     /**

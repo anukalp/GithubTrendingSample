@@ -35,12 +35,6 @@ internal class ColorChecker private constructor() {
     }
 
     companion object {
-        @CheckResult
-        fun fromRes(@ColorRes colorRes: Int): ColorChecker {
-            val matcher = ColorChecker()
-            matcher.colorRes = colorRes
-            return matcher
-        }
 
         @CheckResult
         fun from(@ColorInt color: Int): ColorChecker {

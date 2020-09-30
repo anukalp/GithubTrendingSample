@@ -31,12 +31,12 @@ class TrendingItemViewModelTest {
     fun `test verify live Data`() {
         val reader: InputStreamReader =
             javaClass.classLoader.getResourceAsStream("api-response/repos-git.json").reader()
-        var result: List<GitRepositoryModel> = gson.fromJson(
+        val result: List<GitRepositoryModel> = gson.fromJson(
             reader,
             object : TypeToken<List<GitRepositoryModel?>?>() {}.type
         )
 
-        var data = result[0]
+        val data = result[0]
         data.expanded = false
 
         viewModel = TrendingItemViewModel(data)
@@ -51,7 +51,7 @@ class TrendingItemViewModelTest {
         val author = viewModel.getAuthor().getOrAwaitValue()
         val expanded = viewModel.getExpanded().getOrAwaitValue()
 
-        data?.also {
+        data.also {
             MatcherAssert.assertThat(languageColor, CoreMatchers.`is`(it.languageColor))
             MatcherAssert.assertThat(imageUrl, CoreMatchers.`is`(it.avatar))
             MatcherAssert.assertThat(language, CoreMatchers.`is`(it.language))
@@ -68,13 +68,13 @@ class TrendingItemViewModelTest {
     fun `test verify expanded Data`() {
         val reader: InputStreamReader =
             javaClass.classLoader.getResourceAsStream("api-response/repos-git.json").reader()
-        var result: List<GitRepositoryModel> = gson.fromJson(
+        val result: List<GitRepositoryModel> = gson.fromJson(
             reader,
             object : TypeToken<List<GitRepositoryModel?>?>() {}.type
         )
 
 
-        var data = result[1]
+        val data = result[1]
 
         viewModel = TrendingItemViewModel(data)
 
@@ -88,7 +88,7 @@ class TrendingItemViewModelTest {
         val author = viewModel.getAuthor().getOrAwaitValue()
         var expanded = viewModel.getExpanded().getOrAwaitValue()
 
-        data?.also {
+        data.also {
             MatcherAssert.assertThat(languageColor, CoreMatchers.`is`(it.languageColor))
             MatcherAssert.assertThat(imageUrl, CoreMatchers.`is`(it.avatar))
             MatcherAssert.assertThat(language, CoreMatchers.`is`(it.language))

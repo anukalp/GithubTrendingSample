@@ -10,15 +10,13 @@ import com.gojekgithub.trending.constants.Resource
 import com.gojekgithub.trending.constants.Status
 import com.gojekgithub.trending.data.model.GitRepositoryModel
 import com.gojekgithub.trending.data.repo.TrendingRepository
-import com.gojekgithub.trending.utils.NetworkHelper
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-class MainViewModel constructor(
-    private val mainRepository: TrendingRepository,
-    private val networkHelper: NetworkHelper
+class MainViewModel(
+    private val mainRepository: TrendingRepository
 ) : ViewModel() {
     private val gitRepos = MutableLiveData<Resource<List<GitRepositoryModel>>>()
     val repos: LiveData<Resource<List<GitRepositoryModel>>>
@@ -72,7 +70,5 @@ class MainViewModel constructor(
         }
     }
 
-    companion object {
-        const val ERROR_MSG = "No Internet Connection"
-    }
+    companion object
 }

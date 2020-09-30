@@ -46,11 +46,14 @@ class MainViewModelTest {
     fun `test verify error state network disconnected`() =
         coroutinesTestRule.testDispatcher.runBlockingTest {
             Mockito.`when`(networkHelper.isNetworkConnected()).thenReturn(false)
-            mainViewModel = MainViewModel(trendingRepository, networkHelper)
+            mainViewModel = MainViewModel(trendingRepository)
             val resource = mainViewModel.repos.value
             MatcherAssert.assertThat(mainViewModel.repos, CoreMatchers.notNullValue())
-            MatcherAssert.assertThat(resource!!.status, CoreMatchers.`is`(Status.Error))
-            MatcherAssert.assertThat(resource!!.data, CoreMatchers.nullValue())
+            MatcherAssert.assertThat(
+                resource!!.status,
+                CoreMatchers.`is`(Status.Error)
+            )
+            MatcherAssert.assertThat(resource.data, CoreMatchers.nullValue())
             Mockito.verify(trendingRepository, Mockito.times(0)).getRepositories()
         }
 
@@ -68,17 +71,17 @@ class MainViewModelTest {
             emit(NetworkResponse.Success(result))
         }
         Mockito.`when`(trendingRepository.getRepositories()).thenReturn(myFlow)
-        mainViewModel = MainViewModel(trendingRepository, networkHelper)
+        mainViewModel = MainViewModel(trendingRepository)
         val resource = mainViewModel.repos.value
         MatcherAssert.assertThat(mainViewModel.repos, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(resource!!.status, CoreMatchers.`is`(Status.Loading))
-        MatcherAssert.assertThat(resource!!.data, CoreMatchers.nullValue())
+        MatcherAssert.assertThat(resource.data, CoreMatchers.nullValue())
 
         myFlow.collect {
             val resource = mainViewModel.repos.value
             MatcherAssert.assertThat(mainViewModel.repos, CoreMatchers.notNullValue())
             MatcherAssert.assertThat(resource!!.status, CoreMatchers.`is`(Status.Success))
-            MatcherAssert.assertThat(resource!!.data, CoreMatchers.`is`(result))
+            MatcherAssert.assertThat(resource.data, CoreMatchers.`is`(result))
             Mockito.verify(trendingRepository, Mockito.times(1)).getRepositories()
         }
     }
@@ -95,11 +98,11 @@ class MainViewModelTest {
         Mockito.`when`(trendingRepository.getRepositories()).thenReturn(flow {
             emit(NetworkResponse.Success(result))
         })
-        mainViewModel = MainViewModel(trendingRepository, networkHelper)
+        mainViewModel = MainViewModel(trendingRepository)
         val resource = mainViewModel.repos.value
         MatcherAssert.assertThat(mainViewModel.repos, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(resource!!.status, CoreMatchers.`is`(Status.Success))
-        MatcherAssert.assertThat(resource!!.data, CoreMatchers.`is`(result))
+        MatcherAssert.assertThat(resource.data, CoreMatchers.`is`(result))
         Mockito.verify(trendingRepository, Mockito.times(1)).getRepositories()
     }
 
@@ -109,11 +112,11 @@ class MainViewModelTest {
         Mockito.`when`(trendingRepository.getRepositories()).thenReturn(flow {
             emit(NetworkResponse.Success(null))
         })
-        mainViewModel = MainViewModel(trendingRepository, networkHelper)
+        mainViewModel = MainViewModel(trendingRepository)
         val resource = mainViewModel.repos.value
         MatcherAssert.assertThat(mainViewModel.repos, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(resource!!.status, CoreMatchers.`is`(Status.Success))
-        MatcherAssert.assertThat(resource!!.data, CoreMatchers.nullValue())
+        MatcherAssert.assertThat(resource.data, CoreMatchers.nullValue())
         Mockito.verify(trendingRepository, Mockito.times(1)).getRepositories()
     }
 
@@ -123,13 +126,13 @@ class MainViewModelTest {
         Mockito.`when`(trendingRepository.getRepositories()).thenReturn(flow {
             throw Exception("Error in repo!")
         })
-        mainViewModel = MainViewModel(trendingRepository, networkHelper)
+        mainViewModel = MainViewModel(trendingRepository)
         val resource = mainViewModel.repos.value
         MatcherAssert.assertThat(mainViewModel.repos, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(resource!!.status, CoreMatchers.`is`(Status.Error))
-        MatcherAssert.assertThat(resource!!.data, CoreMatchers.nullValue())
+        MatcherAssert.assertThat(resource.data, CoreMatchers.nullValue())
         MatcherAssert.assertThat(
-            resource!!.message,
+            resource.message,
             CoreMatchers.`is`("java.lang.Exception: Error in repo!")
         )
         Mockito.verify(trendingRepository, Mockito.times(1)).getRepositories()
@@ -141,13 +144,13 @@ class MainViewModelTest {
         Mockito.`when`(trendingRepository.getRepositories()).thenReturn(flow {
             emit(NetworkResponse.Error(Exception("400 bad request")))
         })
-        mainViewModel = MainViewModel(trendingRepository, networkHelper)
+        mainViewModel = MainViewModel(trendingRepository)
         val resource = mainViewModel.repos.value
         MatcherAssert.assertThat(mainViewModel.repos, CoreMatchers.notNullValue())
         MatcherAssert.assertThat(resource!!.status, CoreMatchers.`is`(Status.Error))
-        MatcherAssert.assertThat(resource!!.data, CoreMatchers.nullValue())
+        MatcherAssert.assertThat(resource.data, CoreMatchers.nullValue())
         MatcherAssert.assertThat(
-            resource!!.message,
+            resource.message,
             CoreMatchers.`is`("java.lang.Exception: 400 bad request")
         )
         Mockito.verify(trendingRepository, Mockito.times(1)).getRepositories()
@@ -162,7 +165,7 @@ class MainViewModelTest {
         }
         Mockito.`when`(trendingRepository.getRepositories()).thenReturn(testFlow)
 
-        mainViewModel = MainViewModel(trendingRepository, networkHelper)
+        mainViewModel = MainViewModel(trendingRepository)
 
         testFlow.collect {
             mainViewModel.sortData(R.id.action_name)
@@ -184,7 +187,7 @@ class MainViewModelTest {
         }
         Mockito.`when`(trendingRepository.getRepositories()).thenReturn(testFlow)
 
-        mainViewModel = MainViewModel(trendingRepository, networkHelper)
+        mainViewModel = MainViewModel(trendingRepository)
 
         val data = arrayListOf<GitRepositoryModel>()
         data.addAll(result)
@@ -205,8 +208,8 @@ class MainViewModelTest {
 
         val resource = mainViewModel.repos.getOrAwaitValue()
         MatcherAssert.assertThat(mainViewModel.repos, CoreMatchers.notNullValue())
-        MatcherAssert.assertThat(resource!!.status, CoreMatchers.`is`(Status.Success))
-        MatcherAssert.assertThat(resource!!.data, CoreMatchers.`is`(data))
+        MatcherAssert.assertThat(resource.status, CoreMatchers.`is`(Status.Success))
+        MatcherAssert.assertThat(resource.data, CoreMatchers.`is`(data))
     }
 
 

@@ -17,7 +17,7 @@ interface TrendingApiService {
     suspend fun getRepositories(
         @Header(HEADER_FORCE_REMOTE) forceRefresh : String = "false",
         @Query("language") language: String? = null,
-        @Query("since") since: String? = TrendingApiService.SINCE,
+        @Query("since") since: String? = SINCE,
         @Query("spoken_language_code") spoken_language_code: String? = null,
     ): Response<List<GitRepositoryModel>>
 

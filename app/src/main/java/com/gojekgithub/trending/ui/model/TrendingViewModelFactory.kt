@@ -11,7 +11,7 @@ class TrendingViewModelFactory(
     context: Context, private val repository: TrendingRepository, private val networkHelper: NetworkHelper) : AndroidViewModelFactory((context as Application)) {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass == MainViewModel::class.java) {
-            return MainViewModel(repository, networkHelper) as T
+            return MainViewModel(repository) as T
         }
         return super.create(modelClass)
     }

@@ -31,14 +31,14 @@ class DrawableMatcher private constructor(private val expectedId: Int) :
         if (target !is ImageView) {
             return false
         }
-        val imageView: ImageView = target as ImageView
+        val imageView: ImageView = target
         if (expectedId < 0) {
             return imageView.drawable == null
         }
         val resources: Resources = target.context.resources
         val expectedDrawable: Drawable = resources.getDrawable(expectedId)
             ?: return false
-        val bitmap = getBitmap(imageView.getDrawable())
+        val bitmap = getBitmap(imageView.drawable)
         val otherBitmap = getBitmap(expectedDrawable)
         return bitmap.sameAs(otherBitmap)
     }
@@ -55,7 +55,7 @@ class DrawableMatcher private constructor(private val expectedId: Int) :
     }
 
     override fun describeTo(description: Description) {
-        description.appendText("with drawable resId: " + expectedId)
+        description.appendText("with drawable resId: $expectedId")
     }
 
     companion object {
@@ -70,19 +70,6 @@ class DrawableMatcher private constructor(private val expectedId: Int) :
         @CheckResult
         fun withDrawable(@DrawableRes drawableRes: Int): Matcher<View> {
             return DrawableMatcher(drawableRes)
-        }
-
-        /**
-         * Matches that the text has the expected color.
-         *
-         *
-         *
-         * Example usage:
-         * `onView(withId(R.id.view)).check(matches(withTextColor("#0000ff")));`
-         */
-        @CheckResult
-        fun noDrawable(color: String): Matcher<View> {
-            return DrawableMatcher(-1)
         }
 
     }
