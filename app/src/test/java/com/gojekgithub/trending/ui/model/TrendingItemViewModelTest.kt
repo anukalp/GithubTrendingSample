@@ -6,6 +6,7 @@ import com.gojekgithub.trending.data.model.GitRepositoryModel
 import com.gojekgithub.trending.util.getOrAwaitValue
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.Rule
@@ -22,6 +23,7 @@ class TrendingItemViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    @ExperimentalCoroutinesApi
     @get:Rule
     val coroutinesTestRule = CoroutinesTestRule()
 

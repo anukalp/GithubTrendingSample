@@ -8,9 +8,7 @@ import dagger.Provides
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.Cache
-import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
+import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.mockwebserver.MockWebServer
 import retrofit2.Retrofit
@@ -58,6 +56,8 @@ class TestNetworkingModule {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(provideResponseCacheInterceptor())
+            .addInterceptor(provideRequestCacheInterceptor())
             .cache(cache)
             .retryOnConnectionFailure(true)
             .connectTimeout(30, TimeUnit.SECONDS)
@@ -66,12 +66,50 @@ class TestNetworkingModule {
     } else OkHttpClient
         .Builder()
         .cache(cache)
+        .addInterceptor(provideResponseCacheInterceptor())
+        .addInterceptor(provideRequestCacheInterceptor())
         .retryOnConnectionFailure(true)
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .retryOnConnectionFailure(true)
         .build()
 
+
+    private fun provideResponseCacheInterceptor(): Interceptor {
+        return Interceptor { chain ->
+            val response = chain.proceed(chain.request())
+            val cacheControl: CacheControl = CacheControl.Builder()
+                    .maxStale(2, TimeUnit.HOURS)
+                    .build()
+            response.newBuilder()
+                .removeHeader(TrendingNetworkingModule.HEADER_PRAGMA)
+                .removeHeader(TrendingNetworkingModule.HEADER_CACHE_CONTROL)
+                .header(TrendingNetworkingModule.HEADER_CACHE_CONTROL, cacheControl.toString())
+                .build()
+        }
+    }
+
+    private fun provideRequestCacheInterceptor(): Interceptor {
+        return Interceptor { chain ->
+            var request: Request = chain.request()
+            val forceCache = request.header(TrendingApiService.HEADER_FORCE_REMOTE)
+            if (forceCache.equals("true", true)) {
+                request = request.newBuilder()
+                    .removeHeader(TrendingNetworkingModule.HEADER_CACHE_CONTROL)
+                    .build()
+            } else {
+                val cacheControl = CacheControl.Builder()
+                    .maxStale(2, TimeUnit.HOURS)
+                    .build()
+                request = request.newBuilder()
+                    .removeHeader(TrendingNetworkingModule.HEADER_PRAGMA)
+                    .removeHeader(TrendingNetworkingModule.HEADER_CACHE_CONTROL)
+                    .cacheControl(cacheControl)
+                    .build()
+            }
+            chain.proceed(request)
+        }
+    }
 
     @Provides
     @Singleton

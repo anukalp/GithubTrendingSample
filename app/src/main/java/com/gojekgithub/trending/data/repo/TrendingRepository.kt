@@ -12,8 +12,9 @@ import javax.inject.Inject
 
 class TrendingRepository @Inject constructor(private val apiService: TrendingApiService) {
 
-    suspend fun getRepositories() = flow {
-        return@flow apiService.getRepositories().let {
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
+    suspend fun getRepositories(forcedRemote : Boolean = false) = flow {
+        return@flow apiService.getRepositories("$forcedRemote").let {
             if (it.isSuccessful) {
                 emit(NetworkResponse.Success(it.body()))
             } else {
@@ -22,6 +23,7 @@ class TrendingRepository @Inject constructor(private val apiService: TrendingApi
         }
     }.flowOn(Dispatchers.IO)
 
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
     fun filterRepos(itemId: Int, repoData: List<GitRepositoryModel>?) = flow {
         repoData?.let{
             when (itemId) {

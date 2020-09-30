@@ -9,6 +9,7 @@ import com.gojekgithub.trending.data.api.TrendingApiService
 import com.gojekgithub.trending.data.model.GitRepositoryModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType
@@ -32,6 +33,7 @@ class TrendingRepoTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    @ExperimentalCoroutinesApi
     @get:Rule
     val coroutinesTestRule = CoroutinesTestRule()
 

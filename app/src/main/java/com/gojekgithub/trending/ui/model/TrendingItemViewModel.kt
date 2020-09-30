@@ -21,7 +21,7 @@ class TrendingItemViewModel constructor(
     private val expanded: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
-        trendingRepoData?.also {
+        trendingRepoData.also {
             author.value = it.author
             title.value = it.name
             imageUrl.value = it.avatar

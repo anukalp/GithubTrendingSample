@@ -55,7 +55,7 @@ class MainFragment : Fragment(), TrendingRetryListener {
     }
 
     override fun fetchData() {
-        viewModel.fetchGitRepos()
+        viewModel.fetchGitRepos(true)
     }
 
 }

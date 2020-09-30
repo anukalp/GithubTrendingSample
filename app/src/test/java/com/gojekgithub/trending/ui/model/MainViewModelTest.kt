@@ -12,13 +12,14 @@ import com.gojekgithub.trending.util.getOrAwaitValue
 import com.gojekgithub.trending.utils.NetworkHelper
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers.any
@@ -36,10 +37,12 @@ class MainViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    @ExperimentalCoroutinesApi
     @get:Rule
     val coroutinesTestRule = CoroutinesTestRule()
 
     @Test
+    @Ignore("Network caching not required now")
     fun `test verify error state network disconnected`() =
         coroutinesTestRule.testDispatcher.runBlockingTest {
             Mockito.`when`(networkHelper.isNetworkConnected()).thenReturn(false)

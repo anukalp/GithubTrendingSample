@@ -1,6 +1,5 @@
 package com.gojekgithub.trending.ui.model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -54,29 +53,22 @@ class MainViewModel constructor(
         }
     }
 
-    fun fetchGitRepos() {
-        gitRepos.postValue(Resource.loading(null))
+    fun fetchGitRepos(forcedRemote: Boolean = false) {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
-                mainRepository.getRepositories().onStart {
-                    gitRepos.postValue(Resource.loading(null))
-                }.catch { e ->
-                    run {
-                        e.printStackTrace()
-                        gitRepos.postValue(Resource.error(e.toString(), null))
-                    }
-                }.collect {
-                    when (it) {
-                        is NetworkResponse.Success -> gitRepos.postValue(Resource.success(it.data))
-                        is NetworkResponse.Error -> gitRepos.postValue(
-                            Resource.error(
-                                it.data.toString(),
-                                null
-                            )
+            mainRepository.getRepositories(forcedRemote).onStart {
+                gitRepos.postValue(Resource.loading(null))
+            }.catch { e -> gitRepos.postValue(Resource.error(e.toString(), null))
+            }.collect {
+                when (it) {
+                    is NetworkResponse.Success -> gitRepos.postValue(Resource.success(it.data))
+                    is NetworkResponse.Error -> gitRepos.postValue(
+                        Resource.error(
+                            it.data.toString(),
+                            null
                         )
-                    }
+                    )
                 }
-            } else gitRepos.postValue(Resource.error(ERROR_MSG, null))
+            }
         }
     }
 

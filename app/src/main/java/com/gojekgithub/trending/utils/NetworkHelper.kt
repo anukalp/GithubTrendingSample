@@ -16,8 +16,10 @@ class NetworkHelper @Inject internal constructor(private val context: Context) {
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val networkCapabilities = connectivityManager.activeNetwork ?: return false
+
             val activeNetwork =
                 connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+
             result = when {
                 activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
                 activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
