@@ -169,7 +169,7 @@ class MainActivityUiClickTest {
         //Click to expand ui
         clickRecyclerViewItems(result)
 
-        validateUIForRecyclerView(sortedDataByStars, true)
+        validateUIForRecyclerView(sortedDataByStars, false)
     }
 
     @Test
@@ -215,7 +215,7 @@ class MainActivityUiClickTest {
         //Click to expand ui
         clickRecyclerViewItems(result)
 
-        validateUIForRecyclerView(sortedDataByName, true)
+        validateUIForRecyclerView(sortedDataByName, false)
     }
 
 

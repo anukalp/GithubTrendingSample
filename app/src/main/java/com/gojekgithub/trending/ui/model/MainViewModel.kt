@@ -62,7 +62,6 @@ class MainViewModel constructor(
                     gitRepos.postValue(Resource.loading(null))
                 }.catch { e ->
                     run {
-                        Log.d("anukalp", "$e")
                         e.printStackTrace()
                         gitRepos.postValue(Resource.error(e.toString(), null))
                     }
