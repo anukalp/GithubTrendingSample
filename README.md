@@ -1,9 +1,8 @@
-# store-ping-client
+
+# Trending list of github repo's, written and implemented in kotlin, using  MVVM, LiveData, Retrofit, Data Binding, Coroutines, Flows, Espresso and Ui test cases .
 
 [![Language](https://img.shields.io/badge/Language-Kotlin-orange)](https://kotlinlang.org/)
 [![Platform](https://img.shields.io/badge/Platform-Android-brightgreen)](https://developer.android.com/docs)
-
-# Trending list of github repo's, written and implemented in kotlin, using  MVVM, LiveData, Retrofit, Data Binding, Coroutines, Flows, Espresso and Ui test cases .
 
 ## Functional Requirements
 1. The app should fetch the trending repositories from the provided public API and display it to the
