@@ -1,5 +1,6 @@
 
-# Trending list of github repo's, written and implemented in kotlin. Dagger, MVVM, LiveData, Retrofit, Data Binding, Coroutines, Flows, Espresso Ui and unit test cases.
+# Gojek Android challenge (Accepted)
+## Trending list of github repo's, written and implemented in Kotlin. Dagger, MVVM, LiveData, Retrofit, Data Binding, Coroutines, Flows, Espresso Ui and unit test cases.
 
 [![Language](https://img.shields.io/badge/Language-Kotlin-orange)](https://kotlinlang.org/)
 [![Platform](https://img.shields.io/badge/Platform-Android-brightgreen)](https://developer.android.com/docs)
